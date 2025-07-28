@@ -63,7 +63,7 @@ class EarlyStopping:
         self.counter = 0
         self.best_score = None
         self.early_stop = False
-        self.val_loss_min = np.Inf
+        self.val_loss_min = np.inf
 
     def __call__(self, epoch, val_loss, model, ckpt_name = 'checkpoint.pt'):
 
@@ -75,6 +75,8 @@ class EarlyStopping:
         elif score < self.best_score:
             self.counter += 1
             print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
+            if epoch < self.stop_epoch:
+                print(f'EarlyStopping: epoch {epoch} is below stop epoch {self.stop_epoch}, not stopping.')
             if self.counter >= self.patience and epoch > self.stop_epoch:
                 self.early_stop = True
         else:
