@@ -23,8 +23,10 @@ from tqdm import tqdm
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def score2percentile(score, ref):
-    percentile = percentileofscore(ref, score)
-    return percentile
+    # Ensure ref_scores is a flat 1D array
+    ref_flat = np.array(ref).flatten()
+    percentile = percentileofscore(ref_flat, score)
+    return float(percentile)
 
 def drawHeatmap(scores, coords, slide_path=None, wsi_object=None, vis_level = -1, **kwargs):
     if wsi_object is None:
@@ -77,7 +79,7 @@ def compute_from_patches(wsi_object, img_transforms, feature_extractor=None, cla
 
                 if ref_scores is not None:
                     for score_idx in range(len(A)):
-                        A[score_idx] = score2percentile(A[score_idx], ref_scores)
+                        A[score_idx, 0] = score2percentile(A[score_idx, 0].item(), ref_scores)
 
                 asset_dict = {'attention_scores': A, 'coords': coords}
                 save_path = save_hdf5(attn_save_path, asset_dict, mode=mode)

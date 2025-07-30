@@ -8,8 +8,232 @@ from models.model_clam import CLAM_MB, CLAM_SB
 from sklearn.preprocessing import label_binarize
 from sklearn.metrics import roc_auc_score, roc_curve
 from sklearn.metrics import auc as calc_auc
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from matplotlib.colors import LinearSegmentedColormap
+from io import BytesIO
+from PIL import Image
+import h5py
 
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+def create_attention_heatmap(attention_scores, grid_size=None):
+    """
+    Create a heatmap visualization from attention scores
+    
+    Args:
+        attention_scores: torch.Tensor of attention scores (N,) where N is number of patches
+        grid_size: tuple (height, width) for arranging patches in grid. If None, infers square grid
+    
+    Returns:
+        PIL Image of the heatmap
+    """
+    attention_np = attention_scores.cpu().numpy().squeeze()
+    
+    # Handle edge case where all attention scores are the same
+    if np.max(attention_np) == np.min(attention_np):
+        attention_np = np.ones_like(attention_np) * 0.5
+    else:
+        # Normalize attention scores to [0, 1]
+        attention_np = (attention_np - attention_np.min()) / (attention_np.max() - attention_np.min())
+    
+    # If grid_size not provided, assume square grid
+    if grid_size is None:
+        n_patches = len(attention_np)
+        grid_h = grid_w = int(np.ceil(np.sqrt(n_patches)))
+    else:
+        grid_h, grid_w = grid_size
+    
+    # Pad attention scores if necessary
+    total_patches = grid_h * grid_w
+    if len(attention_np) < total_patches:
+        padded_attention = np.zeros(total_patches)
+        padded_attention[:len(attention_np)] = attention_np
+        attention_np = padded_attention
+    elif len(attention_np) > total_patches:
+        attention_np = attention_np[:total_patches]
+    
+    # Reshape to grid
+    attention_grid = attention_np.reshape(grid_h, grid_w)
+    
+    # Create heatmap with proper figure handling
+    fig, ax = plt.subplots(figsize=(6, 6))
+    im = ax.imshow(attention_grid, cmap='hot', interpolation='nearest')
+    plt.colorbar(im, ax=ax, label='Attention Score', fraction=0.046, pad=0.04)
+    ax.set_title('Attention Heatmap', fontsize=14)
+    ax.axis('off')
+    
+    # Convert plot to PIL Image
+    buf = BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100, facecolor='white')
+    buf.seek(0)
+    img = Image.open(buf)
+    plt.close(fig)  # Explicitly close the figure to free memory
+    
+    return img
+
+def create_spatial_attention_heatmap(attention_scores, coords, patch_size=256, downsample_factor=32, slide_name=None):
+    """
+    Create a spatial heatmap visualization from attention scores and patch coordinates
+    
+    Args:
+        attention_scores: torch.Tensor of attention scores (N,) where N is number of patches
+        coords: numpy array of patch coordinates (N, 2) - (x, y) coordinates
+        patch_size: size of each patch in pixels
+        downsample_factor: factor to downsample the final heatmap for visualization
+        slide_name: name of the slide for title display
+    
+    Returns:
+        PIL Image of the spatial heatmap
+    """
+    attention_np = attention_scores.cpu().numpy().squeeze()
+    
+    # Handle edge case where all attention scores are the same
+    if np.max(attention_np) == np.min(attention_np):
+        attention_np = np.ones_like(attention_np) * 0.5
+    else:
+        # Normalize attention scores to [0, 1]
+        attention_np = (attention_np - attention_np.min()) / (attention_np.max() - attention_np.min())
+    
+    # Calculate the extent of the WSI based on coordinates
+    min_x, min_y = coords.min(axis=0)
+    max_x, max_y = coords.max(axis=0)
+    
+    # Create a canvas size based on the coordinate extent
+    canvas_width = int((max_x - min_x + patch_size) // downsample_factor)
+    canvas_height = int((max_y - min_y + patch_size) // downsample_factor)
+    
+    # Initialize canvas
+    attention_canvas = np.zeros((canvas_height, canvas_width))
+    count_canvas = np.zeros((canvas_height, canvas_width))
+    
+    # Calculate patch size on canvas
+    patch_canvas_size = max(1, patch_size // downsample_factor)
+    
+    # Map each patch to its position on the canvas
+    for i, (x, y) in enumerate(coords):
+        # Convert coordinates to canvas coordinates
+        canvas_x = int((x - min_x) // downsample_factor)
+        canvas_y = int((y - min_y) // downsample_factor)
+        
+        # Handle boundary conditions
+        end_x = min(canvas_x + patch_canvas_size, canvas_width)
+        end_y = min(canvas_y + patch_canvas_size, canvas_height)
+        
+        # Add attention score to canvas - fill the entire patch area
+        attention_canvas[canvas_y:end_y, canvas_x:end_x] += attention_np[i]
+        count_canvas[canvas_y:end_y, canvas_x:end_x] += 1
+    
+    # Average overlapping regions
+    mask = count_canvas > 0
+    attention_canvas[mask] /= count_canvas[mask]
+    
+    # Apply Gaussian smoothing to reduce pixelation
+    try:
+        from scipy import ndimage
+        # Smooth the attention map to create more continuous appearance
+        sigma = max(1.0, patch_canvas_size / 3.0)  # Adaptive smoothing based on patch size
+        attention_canvas = ndimage.gaussian_filter(attention_canvas, sigma=sigma)
+    except ImportError:
+        # Fallback if scipy is not available - manual smoothing
+        print("Warning: scipy not available, using basic smoothing")
+        # Simple manual smoothing by averaging with neighbors
+        if patch_canvas_size > 1:
+            # Create a simple kernel for smoothing
+            kernel_size = max(3, int(patch_canvas_size))
+            if kernel_size % 2 == 0:
+                kernel_size += 1  # Make sure kernel size is odd
+            
+            # Pad the array for convolution
+            pad_size = kernel_size // 2
+            padded_canvas = np.pad(attention_canvas, pad_size, mode='constant', constant_values=0)
+            smoothed_canvas = np.zeros_like(attention_canvas)
+            
+            # Manual convolution with uniform kernel
+            for i in range(attention_canvas.shape[0]):
+                for j in range(attention_canvas.shape[1]):
+                    window = padded_canvas[i:i+kernel_size, j:j+kernel_size]
+                    smoothed_canvas[i, j] = np.mean(window[window > 0]) if np.any(window > 0) else 0
+            
+            attention_canvas = smoothed_canvas
+    
+    # Create custom blue-to-red colormap
+    colors = ['#000080', '#0000FF', '#4169E1', '#87CEEB', '#FFFFFF', '#FFB6C1', '#FF6347', '#FF0000', '#8B0000']
+    n_bins = 256
+    cmap = LinearSegmentedColormap.from_list('blue_red', colors, N=n_bins)
+    
+    # Create heatmap visualization
+    fig, ax = plt.subplots(figsize=(12, 10))
+    
+    # Use better interpolation to smooth the visualization
+    im = ax.imshow(attention_canvas, cmap=cmap, interpolation='bicubic', origin='upper', 
+                   aspect='equal', vmin=0, vmax=1)
+    
+    # Create colorbar
+    cbar = plt.colorbar(im, ax=ax, label='Attention Score', fraction=0.046, pad=0.04)
+    cbar.ax.tick_params(labelsize=12)
+    
+    # Set title with slide name if provided
+    if slide_name:
+        title = f'Spatial Attention Heatmap - {slide_name}'
+    else:
+        title = 'Spatial Attention Heatmap'
+    ax.set_title(title, fontsize=16, fontweight='bold', pad=20)
+    
+    # Customize axes
+    ax.set_xlabel('WSI Width (downsampled)', fontsize=14)
+    ax.set_ylabel('WSI Height (downsampled)', fontsize=14)
+    ax.tick_params(labelsize=12)
+    
+    # Add grid for better reference (subtle)
+    ax.grid(True, alpha=0.3, linewidth=0.5)
+    
+    # Tight layout to prevent clipping
+    plt.tight_layout()
+    
+    # Convert plot to PIL Image
+    buf = BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight', dpi=150, facecolor='white')
+    buf.seek(0)
+    img = Image.open(buf)
+    plt.close(fig)  # Explicitly close the figure to free memory
+    
+    return img
+
+def get_coords_from_slide_data(slide_data, batch_idx, data_dir):
+    """
+    Get coordinates for a specific slide from slide data
+    
+    Args:
+        slide_data: DataFrame containing slide information
+        batch_idx: index of the current batch/slide
+        data_dir: directory containing h5 files
+    
+    Returns:
+        numpy array of coordinates or None if not found
+    """
+    try:
+        slide_id = slide_data['slide_id'].iloc[batch_idx]
+        h5_path = os.path.join(data_dir, 'h5_files', f'{slide_id}.h5')
+        
+        if os.path.exists(h5_path):
+            with h5py.File(h5_path, 'r') as f:
+                coords = f['coords'][:]
+                return coords
+        else:
+            # Try alternative path structure
+            h5_path = os.path.join(data_dir, f'{slide_id}.h5')
+            if os.path.exists(h5_path):
+                with h5py.File(h5_path, 'r') as f:
+                    coords = f['coords'][:]
+                    return coords
+    except Exception as e:
+        print(f"Warning: Could not load coordinates for slide {batch_idx}: {e}")
+        return None
+    
+    return None
 
 class Accuracy_Logger(object):
     """Accuracy logger"""
@@ -408,10 +632,25 @@ def validate_clam(cur, epoch, model, loader, n_classes, early_stopping = None, w
     prob = np.zeros((len(loader), n_classes))
     labels = np.zeros(len(loader))
     sample_size = model.k_sample
+    
+    # Flags to capture attention and coordinates from first sample for visualization
+    first_sample_attention = None
+    first_sample_coords = None
+    
     with torch.inference_mode():
         for batch_idx, (data, label) in enumerate(loader):
             data, label = data.to(device), label.to(device)      
-            logits, Y_prob, Y_hat, _, instance_dict = model(data, label=label, instance_eval=True)
+            logits, Y_prob, Y_hat, A_raw, instance_dict = model(data, label=label, instance_eval=True)
+            
+            # Capture attention and coordinates from first validation sample for TensorBoard visualization
+            if batch_idx == 0 and writer is not None and isinstance(model, CLAM_SB) and n_classes == 2:
+                first_sample_attention = A_raw.clone()
+                # Try to get coordinates from the dataset
+                if hasattr(loader.dataset, 'slide_data') and hasattr(loader.dataset, 'data_dir'):
+                    first_sample_coords = get_coords_from_slide_data(
+                        loader.dataset.slide_data, batch_idx, loader.dataset.data_dir
+                    )
+            
             acc_logger.log(Y_hat, label)
             
             loss = loss_fn(logits, label)
@@ -464,6 +703,45 @@ def validate_clam(cur, epoch, model, loader, n_classes, early_stopping = None, w
         writer.add_scalar('val/auc', auc, epoch)
         writer.add_scalar('val/error', val_error, epoch)
         writer.add_scalar('val/inst_loss', val_inst_loss, epoch)
+        
+        # Add attention heatmap visualization for CLAM_SB binary classification
+        if first_sample_attention is not None and isinstance(model, CLAM_SB) and n_classes == 2:
+            try:
+                # For CLAM_SB, A_raw has shape (1, N) where N is number of patches
+                attention_scores = first_sample_attention.squeeze(0)  # Remove batch dimension, shape: (N,)
+                
+                # Get slide name for title
+                slide_name = None
+                if hasattr(loader.dataset, 'slide_data'):
+                    try:
+                        slide_name = loader.dataset.slide_data['slide_id'].iloc[0]
+                    except:
+                        pass
+                
+                # Create spatial heatmap if coordinates are available and match attention scores
+                if first_sample_coords is not None and len(first_sample_coords) == len(attention_scores):
+                    print(f"Creating spatial attention heatmap with {len(attention_scores)} patches and {len(first_sample_coords)} coordinates")
+                    heatmap_img = create_spatial_attention_heatmap(attention_scores, first_sample_coords, slide_name=slide_name)
+                    heatmap_tag = 'val/spatial_attention_heatmap'
+                elif first_sample_coords is not None:
+                    print(f"Warning: Coordinate count ({len(first_sample_coords)}) doesn't match attention count ({len(attention_scores)}), using grid layout")
+                    heatmap_img = create_attention_heatmap(attention_scores)
+                    heatmap_tag = 'val/grid_attention_heatmap'
+                else:
+                    print(f"Creating grid attention heatmap with {len(attention_scores)} patches")
+                    heatmap_img = create_attention_heatmap(attention_scores)
+                    heatmap_tag = 'val/grid_attention_heatmap'
+                
+                # Convert PIL image to numpy array for TensorBoard
+                heatmap_np = np.array(heatmap_img)
+                # Convert to format expected by TensorBoard: (C, H, W)
+                if len(heatmap_np.shape) == 3:
+                    heatmap_np = np.transpose(heatmap_np, (2, 0, 1))
+                
+                writer.add_image(heatmap_tag, heatmap_np, epoch)
+                
+            except Exception as e:
+                print(f"Warning: Could not create attention heatmap visualization: {e}")
 
 
     for i in range(n_classes):

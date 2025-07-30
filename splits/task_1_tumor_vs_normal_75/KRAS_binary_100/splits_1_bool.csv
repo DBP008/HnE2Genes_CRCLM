@@ -1,27 +1,28 @@
 ,train,val,test
 23_36903_G1,True,False,False
-23_28700_C2,True,False,False
 23_20436_B9,True,False,False
 I2023_31702_A1,True,False,False
 35552_23_C1,True,False,False
 15106_23_C2,True,False,False
-56852_22_A3,True,False,False
+50763_22_F1,True,False,False
 18870_23_C3,True,False,False
 27943_23_C1,True,False,False
-16900_23_B1,True,False,False
 34948_23_F2,True,False,False
 I2015_257_A2,True,False,False
 I2023-40007 D1_BIG,True,False,False
+I2023-39277 C3_BIG,True,False,False
 I2023-044837 D1_BIG,True,False,False
 I2023-38803 H1_BIG,True,False,False
+I2023-040653 B8_BIG,True,False,False
+I2022-53240 F4_BIG,True,False,False
 I2022-56686 A4_BIG,True,False,False
 I2022-51974 A1_BIG,True,False,False
-I2022-52016 C1_BIG,True,False,False
+I2022-55771 D1_BIG,True,False,False
 I2022-50022 B1_BIG,True,False,False
-I2022-49218 B1_BIG,True,False,False
 I2022-50586 B2_BIG,True,False,False
 I2023-34665 A4_BIG,True,False,False
 19-33629 D1_BIG,True,False,False
+I2011-019459 A1_BIG,True,False,False
 I2020-024901 C2_BIG,True,False,False
 I2011-015813 B3_BIG,True,False,False
 I2018-034898 A2_BIG,True,False,False
@@ -29,10 +30,7 @@ I2014-019183 A2,True,False,False
 I2013-006211 A3_BIG,True,False,False
 I2013-029933 B1_BIG,True,False,False
 I2010-011171 C2,True,False,False
-I2014-006586 A2_BIG,True,False,False
 I2012-027753 A3_BIG,True,False,False
-I2010-017133 A2_BIG,True,False,False
-I2010-017328 D1_BIG,True,False,False
 I2023-053817 D1_BIG,True,False,False
 I2023-052712 D2_BIG,True,False,False
 I2023-051645 C2_BIG,True,False,False
@@ -44,8 +42,8 @@ I2014-014193 A3,True,False,False
 I2012-007316 A3_BIG (2),True,False,False
 I2012-007316 A3_BIG,True,False,False
 18-30793 C2_BIG,True,False,False
-I2011-028554 A4,True,False,False
 I2019-24702 A3_BIG,True,False,False
+I2018-25600 A1_BIG,True,False,False
 I2018-3135 A1_BIG,True,False,False
 I2018-15104 D1_BIG,True,False,False
 I2012-20457  A2_BIG,True,False,False
@@ -53,9 +51,6 @@ I2012-20178 D2_BIG,True,False,False
 I2014-13623 A2_BIG,True,False,False
 I2013-002658 B2_BIG,True,False,False
 I2012-28273 C8_BIG,True,False,False
-I2013-4340 B2_BIG,True,False,False
-I2011-25031 B4_BIG,True,False,False
-I2011-22466 F2_BIG,True,False,False
 I2014-28629 A2_BIG,True,False,False
 I2014-029466 C1_BIG,True,False,False
 I2016-28476 A3_BIG,True,False,False
@@ -63,45 +58,47 @@ I2016-27964 B2_BIG,True,False,False
 I2017-001053 A2_BIG,True,False,False
 I2016-024178 H4_BIG,True,False,False
 I2011-16579 F4_BIG,True,False,False
-I2012-15415 B3_BIG,True,False,False
 I2010-17784 C2_BIG,True,False,False
 I2010-15656 C3_BIG,True,False,False
 I2010-13785 E1_BIG,True,False,False
-I2019-26123 B2_BIG,True,False,False
+I2014-20103 A2_BIG,True,False,False
 I2014-025565 A1_BIG,True,False,False
-I2016-22476 C2_BIG,True,False,False
-I2016-18263  B2_BIG,True,False,False
-I2015-020538 B2_BIG,True,False,False
+I19-11329 A4_BIG,True,False,False
+I2012-11127 C3_BIG,True,False,False
+I2018-1686 A1_BIG,True,False,False
 I2013-30336 B2_BIG,True,False,False
-I2013-27657 D1_BIG,True,False,False
-I2013-27657 D2_BIG,True,False,False
 I2013-014860 A1_BIG,True,False,False
 I2014-18419 D1_BIG,True,False,False
+I2012-266869 E1_BIG,True,False,False
 I2016-005141 A3_BIG,True,False,False
 I2016-003053 A2_BIG,True,False,False
 I2017-3418 F4_BIG,True,False,False
+I2014-027207 A2_BIG,True,False,False
 I2014-031154 A2_BIG,True,False,False
-I2014-001915 A3_BIG,True,False,False
 I2017-21903 D1_BIG,True,False,False
 I2017-032584 J2_BIG,True,False,False
+I2017-040869 C1_BIG,True,False,False
 I2017-004464 B2_BIG,True,False,False
 I2011-9075 D2_BIG,True,False,False
 I2019-40688 A2_BIG,True,False,False
 I2016-1021 C2_BIG,True,False,False
 I2015-022464 A1_BIG,True,False,False
+I2017-20638 A2_BIG,True,False,False
 I2019-018461 B1_BIG,True,False,False
-I2014-26499 A2_BIG,True,False,False
-I2014-26499 A1_BIG,True,False,False
 I2018-28331 B3_BIG,True,False,False
 I2016-16907 A5_BIG,True,False,False
 I2016-16907 A6_BIG,True,False,False
-I2017-006439 D3_BIG,True,False,False
+I2019-36314 A2_BIG,True,False,False
+I2016-22958 A1_BIG,True,False,False
 I2017-15497 C1_BIG,True,False,False
 I2015-13869 A2 isyntax second download_BIG,True,False,False
+I2014-1831 F1_BIG,True,False,False
 I2018-048167 A2_BIG,True,False,False
 I2016-000067 B1_BIG,True,False,False
 I2016- 3236 A1_BIG,True,False,False
+I2014- 27833 B1_BIG,True,False,False
 I2016-019662 D1_BIG,True,False,False
+I2016-019797 A4_BIG,True,False,False
 I2015-23841 C3_BIG,True,False,False
 I2015-014213 A4_BIG,True,False,False
 I2015-31376 L1_BIG,True,False,False
@@ -110,16 +107,20 @@ I2016-004412 A3_BIG,True,False,False
 I2017-037195 A1_BIG,True,False,False
 I22-29956 E3_BIG,True,False,False
 I22-22098 D1_BIG,True,False,False
-I22-25107 B1_BIG,True,False,False
 I22-18170 A1,True,False,False
-I22-32640 B1_BIG,True,False,False
 I22-19563 A1_BIG,True,False,False
 I22-15657 C1_BIG,True,False,False
 I2021-1533 D7_BIG,True,False,False
-I22-18681 E2_BIG,True,False,False
+I2021-34405 A1_BIG,True,False,False
 I2017-33166 A2_BIG,True,False,False
+I2019-7026 A3_BIG,True,False,False
 I2011-20445 B1_BIG,True,False,False
+I2015-000257 A3_BIG,True,False,False
+I2019-7023 D1_BIG,True,False,False
+I2019-7023 B1_BIG,True,False,False
 23_10222_C1,True,False,False
+I2022-36933 B1 re-scanned_BIG,True,False,False
+23_16654_A3,True,False,False
 I2023_94_D2,True,False,False
 I2023_31928_F2,True,False,False
 53280_22_B3,True,False,False
@@ -131,87 +132,86 @@ I2023_31928_F2,True,False,False
 23694_23_B1,True,False,False
 2022_26297_A3,True,False,False
 I2022-49536 B1_BIG,True,False,False
+I2023-016426 E1_BIG,True,False,False
 I2023-027989 A1_BIG,True,False,False
-2022-33292 C1_BIG,True,False,False
-18-20913 A1_BIG,True,False,False
 I2013-025426 A4_BIG,True,False,False
-I2011-021231 A4_BIG,True,False,False
 I2011-003696 A2_BIG,True,False,False
-I2011-006260 B4_BIG,True,False,False
+I2011-014196 A2_BIG,True,False,False
 I2014-013166 C2_BIG,True,False,False
 I2013-004761 A1_BIG,True,False,False
 I2011-024740 A4_BIG,True,False,False
 I2011-021151 B1,True,False,False
 I2010-022883 E3_BIG,True,False,False
-I2023-054132 B4_BIG,True,False,False
+18-46819 D1,True,False,False
 I2023-051400 C9_BIG,True,False,False
+I2023-041126 E1_BIG,True,False,False
+I2010-014100 A3_BIG,True,False,False
 I2018-009254 B1_BIG,True,False,False
-I2018-3768 C1_BIG,True,False,False
 I2019-41139 B2_BIG,True,False,False
-I2019-45708 B1_BIG,True,False,False
 I10-19590 A2_BIG,True,False,False
 I2018-37034 A2_BIG,True,False,False
+I2012-125 D1_BIG,True,False,False
 I2014-8616 C1_BIG,True,False,False
 I2014-28524 C1_BIG,True,False,False
 I2010-2842 F2_BIG,True,False,False
 I2016-25955 D1_BIG,True,False,False
 I2015-13399 A1_BIG,True,False,False
-I20-9230 A1_BIG,True,False,False
 I2015-31227 A3_BIG,True,False,False
 I2018-33924 A1_BIG,True,False,False
-I2013-637 A1_BIG,True,False,False
 I2012-12704 A3_BIG,True,False,False
+I14-23768 A3_BIG,True,False,False
+I2014-16780 B1_BIG,True,False,False
+I2019-9590 A1_BIG,True,False,False
+I2017-16918 B1_BIG,True,False,False
 I2016-33372 A2_BIG,True,False,False
-I2014-002167 A3_BIG,True,False,False
 I2017-31666 B1_BIG,True,False,False
-I2016-18012 B2_BIG,True,False,False
 I2018-34533 A3_BIG,True,False,False
-I2016- 22638 A1_BIG,True,False,False
+I2016- 9556 B2_BIG,True,False,False
 I2018-25366 A1_BIG,True,False,False
 I2016-18630 A7_BIG,True,False,False
-I22-16415 A1_BIG,True,False,False
+I22-22876 A3_BIG,True,False,False
 I22-17786 A1_BIG,True,False,False
-I19-11329 A4_BIG,False,True,False
-I2016-019797 A4_BIG,False,True,False
-I2019-7026 A3_BIG,False,True,False
-I2014-20103 A2_BIG,False,True,False
-I2017-040869 C1_BIG,False,True,False
-50763_22_F1,False,True,False
-I2017-40514 D1_BIG,False,True,False
+I2014-001915 A3_BIG,False,True,False
+I2017-008009 D3_BIG,False,True,False
+I22-18681 E2_BIG,False,True,False
+I22-32640 B1_BIG,False,True,False
+I2012-15415 B3_BIG,False,True,False
+I2010-017328 D1_BIG,False,True,False
+I22-25107 B1_BIG,False,True,False
 I22-14941 D1_BIG,False,True,False
-I2019-7023 D1_BIG,False,True,False
-I2019-7023 B1_BIG,False,True,False
-I2019-36314 A2_BIG,False,True,False
-I2023-040653 B8_BIG,False,True,False
-I2014- 27833 B1_BIG,False,True,False
-I2021-34405 A1_BIG,False,True,False
-I2012-266869 E1_BIG,False,True,False
-I14-23768 A3_BIG,False,True,False
-I2014-16780 B1_BIG,False,True,False
-I2016- 9556 B2_BIG,False,True,False
-I2011-014196 A2_BIG,False,True,False
+I2017-006439 D3_BIG,False,True,False
+I2015-020538 B2_BIG,False,True,False
+I2013-27657 D1_BIG,False,True,False
+I2013-27657 D2_BIG,False,True,False
+I2013-4340 B2_BIG,False,True,False
+I2014-26499 A2_BIG,False,True,False
+I2014-26499 A1_BIG,False,True,False
+23_28700_C2,False,True,False
+2022-33292 C1_BIG,False,True,False
+I2016- 22638 A1_BIG,False,True,False
+I20-9230 A1_BIG,False,True,False
 I2014-14781 A2_BIG,False,True,False
-I2023-041126 E1_BIG,False,True,False
-I2022-36933 B1 re-scanned_BIG,False,True,False
-23_16654_A3,False,True,False
-I2014-1831 F1_BIG,False,False,True
-I2014-027207 A2_BIG,False,False,True
-I2015-000257 A3_BIG,False,False,True
-I2011-019459 A1_BIG,False,False,True
+I2014-002167 A3_BIG,False,True,False
+I2011-006260 B4_BIG,False,True,False
+I2011-021231 A4_BIG,False,True,False
+I2019-26123 B2_BIG,False,False,True
+I2010-017133 A2_BIG,False,False,True
+56852_22_A3,False,False,True
+I2011-25031 B4_BIG,False,False,True
+I2022-52016 C1_BIG,False,False,True
+I2011-22466 F2_BIG,False,False,True
+I2016-18263  B2_BIG,False,False,True
+I2022-49218 B1_BIG,False,False,True
+I2014-006586 A2_BIG,False,False,True
+I2017-40514 D1_BIG,False,False,True
+16900_23_B1,False,False,True
+I2011-028554 A4,False,False,True
 I2016-23253 A1_BIG,False,False,True
-I2017-008009 D3_BIG,False,False,True
-I2017-20638 A2_BIG,False,False,True
-I2016-22958 A1_BIG,False,False,True
-I2018-1686 A1_BIG,False,False,True
-I2022-55771 D1_BIG,False,False,True
-I2023-39277 C3_BIG,False,False,True
-I2022-53240 F4_BIG,False,False,True
-I2012-11127 C3_BIG,False,False,True
-I2018-25600 A1_BIG,False,False,True
-I2023-016426 E1_BIG,False,False,True
-18-46819 D1,False,False,True
-I2019-9590 A1_BIG,False,False,True
-I22-22876 A3_BIG,False,False,True
-I2012-125 D1_BIG,False,False,True
-I2017-16918 B1_BIG,False,False,True
-I2010-014100 A3_BIG,False,False,True
+I2016-22476 C2_BIG,False,False,True
+I2018-3768 C1_BIG,False,False,True
+I2016-18012 B2_BIG,False,False,True
+18-20913 A1_BIG,False,False,True
+I2013-637 A1_BIG,False,False,True
+I2023-054132 B4_BIG,False,False,True
+I2019-45708 B1_BIG,False,False,True
+I22-16415 A1_BIG,False,False,True
